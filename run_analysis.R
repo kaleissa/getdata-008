@@ -1,6 +1,7 @@
 
 library("plyr")
-
+library(reshape2)
+r
 ## Activity 
 ## read activity code data in y_test and y_train and Activity Labels
 labels <- read.table("UCI HAR Dataset/activity_labels.txt") ## table contains activity names
@@ -40,38 +41,27 @@ test <- read.table("UCI HAR Dataset/test/X_test.txt",col.names = features$V2)
 train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$V2)
 ## use rbind to combine test and train into a table called data
 data <- rbind(test,train)
-## remove test and train to conserve ram.
-rm(test, train)
 ## use grepl to get vector of col.names containg means and deviations.
 stdmean <- grepl("mean|std", features$V2)
 ## subset data to include on means and standard deviations
 data <- data[, stdmean]
+## remove test and train to conserve ram.
+rm(test, train, features, stdmean)
 
-
-
-
-
-
-
-
-############################
-## use rbind to combine test and train into a table called data
-data <- rbind(test,train)
-
-## remove testActivity and trainActivity to conserve ram.
-rm(testActivity, trainActivity)
-
-rm(test, train)
-rm(features, labels)
-rm(Activity,Subject,data)
+######################
 
 ## cbind
 asData<-cbind(Activity,Subject,data)
 
-## use grepl to get vector of col.names containg means and deviations.
-## Extract only the measurements on the mean and std
-stdmean <- grepl("mean\\(\\)|std\\(\\)", features$V2)
-stdmean <- grepl("mean|std", features$V2)
-data <- data[, stdmean]
+## remove testActivity and trainActivity to conserve ram.
+rm(Activity,Subject,data)
 
 
+
+
+#############################
+## I learned about the reshape2 package and how to use it with respect from an existing github repository 
+## located at https://github.com/pidanzhou.
+
+meltdata<-melt(asData,c("Subject","Activity"))
+tidyData <- dcast(meltdata, Subject + Activity ~ variable, mean)
