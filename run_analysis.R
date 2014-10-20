@@ -1,5 +1,5 @@
-load_package("lubridate") # for easy date-handling
-load_package("dplyr")
+
+load_package("plyr")
 
 
 
@@ -14,23 +14,24 @@ test <- read.table("UCI HAR Dataset/test/X_test.txt",col.names = features$V2)
 train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$V2)
 
 
+
+testSubject <- read.table("UCI HAR Dataset/test/subject_test.txt",col.names="Subject") ## table contains 
+trainSubject <- read.table("UCI HAR Dataset/train/subject_train.txt",col.names="Subject") ## table contains 
+
+
+
+
+
+
+
+
 ## read activity code data in y_test and y_train
-testSubject <- read.table("UCI HAR Dataset/test/subject_test.txt")
-trainSubject <- read.table("UCI HAR Dataset/train/subject_train.txt")
-
-
-
-
-
-
-
-## read activity code data in y_test and y_train
-testActivity <- read.table("UCI HAR Dataset/test/y_test.txt")
-trainActivity <- read.table("UCI HAR Dataset/train/y_train.txt")
+testActivity <- read.table("UCI HAR Dataset/test/y_test.txt",col.names="Activity")
+trainActivity <- read.table("UCI HAR Dataset/train/y_train.txt",col.names="Activity")
 
 ## Convert V1 to Chr in trainActivity and testActivity
-trainActivity$V1 <- as.character(trainActivity$V1)
 testActivity$V1 <- as.character(testActivity$V1)
+trainActivity$V1 <- as.character(trainActivity$V1)
 
 ## use revalue() from plyr library
 trainActivity$Activity<-revalue(trainActivity$V1, c("1"="WALKING", "2"="WALKING_UPSTAIRS", 
@@ -42,5 +43,11 @@ trainActivity$Activity<-revalue(trainActivity$V1, c("1"="WALKING", "2"="WALKING_
 
 
 # combine test and train into a table called data
+Subject <- rbind(testSubject,trainSubject)
+Activity <- rbind(testActivity,trainActivity)
 data <- rbind(test,train)
 
+## remove testActivity and trainActivity to conserve ram.
+rm(testActivity, trainActivity)
+rm(testSubject, trainSubject)
+rm(test, train)
