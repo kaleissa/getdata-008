@@ -1,7 +1,26 @@
+## structure of code to download and unzip similar to course material 
+## at http://jtleek.com/modules/03_GettingData/03_02_summarizingData/#3
 
+
+## open lpackages required to process data
+
+library("utils", lib.loc="C:/Program Files/R/R-3.1.1/library")
 library("plyr")
 library(reshape2)
-r
+
+## Step 1
+## Download and unzip original data file
+## if Dataset is missing.
+
+if(!file.exists("./UCI HAR Dataset")) {
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+download.file(fileUrl,destfile="Dataset.zip")
+unzip("Dataset.zip") 
+}
+
+
+## Step 2 (read and merge the activity labels data into one table )
+
 ## Activity 
 ## read activity code data in y_test and y_train and Activity Labels
 labels <- read.table("UCI HAR Dataset/activity_labels.txt") ## table contains activity names
@@ -19,9 +38,10 @@ Activity$Activity<-revalue(Activity$Activity, c("1"="WALKING", "2"="WALKING_UPST
 ## remove testActivity and trainActivity to conserve ram.
 rm(testActivity, trainActivity, labels)
 
+
 ################
 
-## Subject
+## Step 3 (read and merge the subject code data into one table )
 ## Read subject_test and subject_train
 testSubject <- read.table("UCI HAR Dataset/test/subject_test.txt",col.names="Subject") ## table contains 
 trainSubject <- read.table("UCI HAR Dataset/train/subject_train.txt",col.names="Subject") ## table contains 
@@ -34,7 +54,8 @@ rm(testSubject, trainSubject)
 
 ###################
 
-## Data Measurments 
+## Step 4 (read and merge the measurments contained in the test and train datasetws
+## labels data into one table )
 ## Read data tables features.txt and Measurments
 features <- read.table("UCI HAR Dataset/features.txt") ## table contains 563 col. names
 test <- read.table("UCI HAR Dataset/test/X_test.txt",col.names = features$V2)
@@ -49,19 +70,21 @@ data <- data[, stdmean]
 rm(test, train, features, stdmean)
 
 ######################
-
+## Step 5 (use cbind to bind the three datatables created in previous steps to form a single datatable )
 ## cbind
 asData<-cbind(Activity,Subject,data)
 
 ## remove testActivity and trainActivity to conserve ram.
 rm(Activity,Subject,data)
 
-
-
-
 #############################
-## I learned about the reshape2 package and how to use it with respect from an existing github repository 
-## located at https://github.com/pidanzhou.
+
+## step 6  deals with the getting the final dataset, use melt() and dcast() to produce a
+## new dataset containg  180 observations (one for each subject per activity)  
+## and 79 columns containing calculated means of the variables. 
 
 meltdata<-melt(asData,c("Subject","Activity"))
 tidyData <- dcast(meltdata, Subject + Activity ~ variable, mean)
+
+## step 7 output data.
+write.table(tidyData, file = "tidyDataset.txt", row.names = F)
