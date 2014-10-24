@@ -44,5 +44,5 @@ In the course of working to create the "tidy dataset" I relied heavily on the Di
   
 3. https://github.com/pidanzhou.<- github repository containing solutions previously applied to this dataset. (this may be a controversial resource) so in my defense I present to you the grader that all of the work and the documents contained in my course project repository is truly my own and has not been compromised by this use of this resource. I welcome any feedback regarding this matter and hope that I have been sufficently forthright and in compliance with expectations.
 
- 3. http://en.wikipedia.org/wiki/Activity_recognition - general information regarding activity recognition provided a context for understanding the nature of the dataset and what it may be used for in future analysis.
+ 4. http://en.wikipedia.org/wiki/Activity_recognition - general information regarding activity recognition provided a context for understanding the nature of the dataset and what it may be used for in future analysis.
  
