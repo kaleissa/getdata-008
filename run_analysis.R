@@ -28,7 +28,7 @@ testActivity <- read.table("UCI HAR Dataset/test/y_test.txt",col.names="Activity
 trainActivity <- read.table("UCI HAR Dataset/train/y_train.txt",col.names="Activity")
 ## Convert $Activity to Chr in trainActivity and testActivity
 testActivity$Activity <- as.character(testActivity$Activity)
-trainActivity$Activity <- as.character(trainActivity$Actity)
+trainActivity$Activity <- as.character(trainActivity$Activity)
 ## use rbind to combine test and train into a table called data
 Activity <- rbind(testActivity,trainActivity)
 ## use revalue() from plyr library
@@ -54,7 +54,7 @@ rm(testSubject, trainSubject)
 
 ###################
 
-## Step 4 (read and merge the measurments contained in the test and train datasetws
+## Step 4 (read and merge the measurments contained in the test and train datasets
 ## labels data into one table )
 ## Read data tables features.txt and Measurments
 features <- read.table("UCI HAR Dataset/features.txt") ## table contains 563 col. names
@@ -64,7 +64,7 @@ train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$V2
 data <- rbind(test,train)
 ## use grepl to get vector of col.names containg means and deviations.
 stdmean <- grepl("mean|std", features$V2)
-## subset data to include on means and standard deviations
+## subset data to include only means and standard deviations
 data <- data[, stdmean]
 ## remove test and train to conserve ram.
 rm(test, train, features, stdmean)
